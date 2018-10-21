@@ -5,16 +5,17 @@ import java.util.ArrayList;
 
 public class Solver {
 
-    private static final ArrayList<Body> BODIES = new ArrayList<Body>();
-    private static final ArrayList<ContactJoint> CONTACTS = new ArrayList<ContactJoint>();
-    private final static int IIC = 200, IPC = 200;
+    public static final ArrayList<Body> BODIES = new ArrayList<Body>();
     public static boolean reset = true, draw = false;
+
+    private static final ArrayList<ContactJoint> CONTACTS = new ArrayList<ContactJoint>();
+    private static final int IIC = 300, IPC = 300;
 
     public static void step() {
         if (reset) {
             BODIES.clear();
             CONTACTS.clear();
-            addObjects();
+            initObjects();
             reset = false;
         }
         int it = 0;
@@ -27,7 +28,6 @@ public class Solver {
         }
         for (int i = 0; i < BODIES.size() - 1; i++) {
             for (int j = i + 1; j < BODIES.size(); j++) {
-
                 Body a = BODIES.get(i);
                 Body b = BODIES.get(j);
                 boolean contains = false;
@@ -47,7 +47,7 @@ public class Solver {
             }
         }
         BODIES.stream().filter((body) -> (body.iMass != 0)).forEachOrdered((Body body) -> {
-            body.linear.plus(Vector.gravity);
+            body.linear.plus(Vector.getProduct(Vector.GRAVITY, PhysicEngine.PC));
         });
         CONTACTS.forEach((contact) -> {
             contact.preStep();
@@ -73,27 +73,24 @@ public class Solver {
         });
         if (draw) {
             CONTACTS.forEach((contact) -> {
-                contact.drawAfterSolve();
+                contact.drawSolve();
             });
         }
-        temp.location.plus(diff);
-        diff.setToZero();
-    }
-
-    static Vector diff = new Vector(0d, 0d);
-
-    private static void addObjects() {
-        //статичные => с бесконечной плотностью
-        BODIES.add(new Body(0d, -225d, Math.toRadians(45), Util.inscribedInCircle(200d, 4), 1d / 0d, 0.5d, 1d));
-        BODIES.add(new Body(-250d, 58d, Math.toRadians(45), Util.inscribedInCircle(200d, 4), 1d / 0d, 0.5d, 1d));
-        BODIES.add(new Body(250d, 58d, Math.toRadians(45), Util.inscribedInCircle(200d, 4), 1d / 0d, 0.5d, 1d));
-        temp = new Body(0d, 0d, Math.toRadians(45), Util.inscribedInCircle(20d, 4), 1d, 0.3d, 1d);
-        BODIES.add(temp);
     }
 
     public static Body temp;
 
-    public static void addObject(Body object) {
-        BODIES.add(object);
+    private static void initObjects() {
+        //статичные => с бесконечной плотностью
+        BODIES.add(new Body(0d, -225d, Math.toRadians(45), Util.inscribedInCircle(200d, 4), 1d / 0d, 0.2d, 0.3d));
+        BODIES.add(new Body(-250d, 58d, Math.toRadians(45), Util.inscribedInCircle(200d, 4), 1d / 0d, 0.2d, 0.3d));
+        BODIES.add(new Body(250d, 58d, Math.toRadians(45), Util.inscribedInCircle(200d, 4), 1d / 0d, 0.2d, 0.3d));
+        for (int i = -100; i <= 100; i += 15) {
+            for (int j = -60; j <= 160; j += 15) {
+                BODIES.add(new Body(i, j, Math.toRadians(0), Util.inscribedInCircle(7.5d, 7), 1d, 0.2d, 0.2d));
+            }
+        }
+        temp = new Body(0d, 0d, Math.toRadians(45), Util.inscribedInCircle(20d, 4), 1d, 0.2d, 0.3d);
+//        BODIES.add(temp);
     }
 }

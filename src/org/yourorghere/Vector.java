@@ -1,21 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.yourorghere;
 
-/**
- *
- * @author aptem
- */
 public class Vector {
 
-    //навести порядок!!!
-    public static Vector gravity = new Vector(0d, -9.8d * 2d);
-    public static Vector nullVector = new Vector(0d, 0d);
-    public static Vector xVector = new Vector(1d, 0d);
-    public static Vector yVector = new Vector(0d, 1d);
     public double x, y;
 
     public Vector(double x, double y) {
@@ -163,7 +149,8 @@ public class Vector {
         return v1.x * v2.y - v2.x * v1.y;
     }
 
-    public double[][] toLine() {
-        return new double[][]{{0d, 0d}, {x * 300d, y * 300d}};
-    }
+    public static final Vector GRAVITY = new Vector(0d, -9.8d);
+    public static final Vector NULL = new Vector(0d, 0d);
+    public static final Vector X = new Vector(1d, 0d);
+    public static final Vector Y = new Vector(0d, 1d);
 }
