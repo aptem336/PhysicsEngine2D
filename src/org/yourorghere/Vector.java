@@ -9,14 +9,6 @@ public class Vector {
         this.y = y;
     }
 
-    public static Vector angleDefine(double len, double angle) {
-        return new Vector(Math.cos(angle) * len, Math.sin(angle) * len);
-    }
-
-    public double angle() {
-        return Math.atan(y / x);
-    }
-
     public double len() {
         return Math.sqrt(squareLen());
     }
@@ -41,39 +33,14 @@ public class Vector {
         y = set.y;
     }
 
-    public void setToZero() {
-        x = 0;
-        y = 0;
-    }
-
-    public void invert() {
-        x = -x;
-        y = -y;
-    }
-
-    public void plus(Vector v) {
+    public void add(Vector v) {
         x += v.x;
         y += v.y;
     }
 
-    public void minus(Vector v) {
-        x -= v.x;
-        y -= v.y;
-    }
-
-    public void plus(Vector v, double d) {
+    public void add(Vector v, double d) {
         x += v.x * d;
         y += v.y * d;
-    }
-
-    public void multiply(double value) {
-        x *= value;
-        y *= value;
-    }
-
-    public void minus(Vector v, double d) {
-        x -= v.x * d;
-        y -= v.y * d;
     }
 
     public void setRotated(double cos, double sin, Vector point, Vector center) {
@@ -117,10 +84,6 @@ public class Vector {
         return new Vector(x / len, y / len);
     }
 
-    public static Vector getProj(Vector a, Vector b) {
-        return getProduct(b, dotProduct(a, b));
-    }
-
     public Vector getRightN() {
         return new Vector(-y, x);
     }
@@ -147,6 +110,10 @@ public class Vector {
 
     public static double crossProduct(Vector v1, Vector v2) {
         return v1.x * v2.y - v2.x * v1.y;
+    }
+
+    public boolean eq(Vector v) {
+        return v.x == x && v.y == y;
     }
 
     public static final Vector GRAVITY = new Vector(0d, -9.8d);

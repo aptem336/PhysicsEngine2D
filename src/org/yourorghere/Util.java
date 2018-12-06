@@ -1,28 +1,22 @@
 package org.yourorghere;
 
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class Util {
 
-    public static void sleep(int time) {
-        try {
-            TimeUnit.MILLISECONDS.sleep(time);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Util.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    //<editor-fold defaultstate="collapsed" desc="Задание полей фигур">
-    public static Vector[] inscribedInCircle(double R, int countStep) {
+    public static Vector[] inscribedInEllipse(double angle, double a, double b, int countStep) {
         Vector[] offset = new Vector[countStep];
+        double angleInc = Math.PI * 2 / (double) countStep;
         for (int i = 0; i < countStep; i++) {
-            double angle = (double) i / countStep * Math.PI * 2d;
-            offset[i] = Vector.angleDefine(R, angle);
+            offset[i] = new Vector(a * Math.cos(angle), b * Math.sin(angle));
+            angle += angleInc;
         }
         return offset;
     }
 
+    public static Vector[] inscribedInCircle(double angle, double R, int countStep) {
+        return inscribedInEllipse(angle, R, R, countStep);
+    }
+
+    //радиус описывающей окружности
     public static double R(Vector[] vertexS) {
         double R = 0;
         for (Vector vertex : vertexS) {
@@ -42,6 +36,7 @@ public class Util {
         return new Vector(xSum / vertexS.length, ySum / vertexS.length);
     }
 
+    //площадь
     public static double area(Vector[] vertexS) {
         double area = 0;
         for (int i = 0; i < vertexS.length; i++) {
@@ -49,5 +44,4 @@ public class Util {
         }
         return Math.abs(area) / 2;
     }
-    //</editor-fold>
 }
